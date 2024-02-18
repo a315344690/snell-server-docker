@@ -9,9 +9,8 @@ RUN apt update && apt install -y unzip wget && \
     apt clean && \
     apt autoclean && \
     rm -fr /var/lib/apt/lists/* && \
-    chmod +x /root/snell.sh 
-
-RUN wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-aarch64.zip"  && \
+    chmod +x /root/snell.sh && \
+    wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-aarch64.zip"  && \
     unzip snell.zip && \
     rm -f snell.zip && \
     chmod +x snell-server && \
