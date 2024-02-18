@@ -54,32 +54,7 @@ jobs:
             ${{ env.IMAGE_REPOSITORY }}:${{ env.VERSION }}
             ${{ env.IMAGE_REPOSITORY }}:latest
           platforms: |
-            linux/amd64
             linux/arm64
-            linux/arm/v7
-            linux/i386
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  push-message:
-    name: Push message
-    runs-on: ubuntu-latest
-    needs: [docker-release]
-    steps:
-      - name: Push message
-        uses: funnyzak/pushoo-action@main
-        with:
-          platforms: ifttt
-          tokens: ${{ secrets.PUSH_TOKEN }}
-          content: |
-            # ${{ github.event.repository.name }} Docker Build Success
-            ## trigger: ${{ github.event_name }} at ${{ github.event.head_commit.timestamp }}
-            ## commit message: ${{ github.event.head_commit.message }}
-            ## commit url: ${{ github.event.head_commit.url }}
-            ## commit author: ${{ github.event.head_commit.author.name }}
-            ## commit email: ${{ github.event.head_commit.author.email }}
-            ## commit id: ${{ github.event.head_commit.id }}
-          title: |
-            ${{ github.repository }} ${{ github.event_name }} Message
-          options: '{"bark": { "url": "https://github.com/${{github.repository}}" }}'
-          debug: false
