@@ -4,8 +4,6 @@ BIN="/usr/bin/snell-server"
 CONF="/etc/snell-server.conf"
 
 
-ulimit -c unlimited
-
 # reuse existing config when the container restarts
 
 run_bin() {
