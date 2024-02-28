@@ -1,19 +1,13 @@
-FROM ubuntu:22.04
+ARG ARCH=
 
-ENV TZ=Asia/Shanghai
+FROM ${ARCH}alpine:latest
 
 WORKDIR /root
 COPY ./snell.sh /root/snell.sh
+COPY ./snell-server /usr/bin/snell-server
 
-RUN apt update && apt install -y unzip wget && \
-    apt clean && \
-    apt autoclean && \
-    rm -fr /var/lib/apt/lists/* && \
+RUN apk update && apk gcc git libc-dev openssh-client && \
     chmod +x /root/snell.sh && \
-    wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-aarch64.zip"  && \
-    unzip snell.zip && \
-    rm -f snell.zip && \
-    chmod +x snell-server && \
-    mv snell-server /usr/bin/
+    chmod +x /usr/bin/snell-server
     
 ENTRYPOINT ["/root/snell.sh"]
