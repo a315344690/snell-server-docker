@@ -1,6 +1,4 @@
-ARG ARCH=
-
-FROM forumi0721/alpine-glibc:latest
+FROM debian:stable-slim
 
 WORKDIR /root
 COPY ./snell.sh /root/snell.sh
