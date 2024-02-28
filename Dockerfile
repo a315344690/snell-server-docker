@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:bullseye-stable
 
 ENV TZ=Asia/Shanghai
 
