@@ -6,7 +6,7 @@ WORKDIR /root
 COPY ./snell.sh /root/snell.sh
 COPY ./snell-server /usr/bin/snell-server
 
-RUN apk update && apk gcc git libc-dev openssh-client && \
+RUN apk update && apk add gcc && \
     chmod +x /root/snell.sh && \
     chmod +x /usr/bin/snell-server
     
