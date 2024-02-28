@@ -1,4 +1,4 @@
-FROM debian:bullseye-stable
+FROM ubuntu:22.04
 
 ENV TZ=Asia/Shanghai
 
