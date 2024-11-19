@@ -39,5 +39,5 @@ generate_config
 [ -n "$OBFS" ] && echo "OBFS:$OBFS" >/dev/null
 [ -n "$HOST" ] && echo "HOST:$HOST" >/dev/null
 
-# exec /root/snell/snell-server -c /root/snell/snell.conf -l "${LOG:-notify}"
+exec /root/snell/snell-server -c /root/snell/snell.conf -l "${LOG:-notify}"
 
