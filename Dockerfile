@@ -2,22 +2,32 @@ FROM alpine
 
 ARG TARGETPLATFORM
 ARG SNELL_SERVER_VERSION=4.0.1
+ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
-RUN apk add --no-cache wget unzip  && \
-    echo 'https://storage.sev.monster/alpine/edge/testing' | tee -a /etc/apk/repositories && \
-    wget https://storage.sev.monster/alpine/edge/testing/x86_64/sevmonster-keys-1-r0.apk && \
-    apk add --allow-untrusted ./sevmonster-keys-1-r0.apk && \
-    apk update && \
-    apk add --no-cache gcompat libstdc++ && \
-    rm /lib/ld-linux-x86-64.so.2 && \
-    apk add --no-cache --force-overwrite glibc && \
-    apk add --no-cache glibc-bin && \
-    rm ./sevmonster-keys-1-r0.apk
+RUN apk add --no-cache wget unzip tini gcompat libstdc++ && \
+    case "$TARGETPLATFORM" in \
+    "linux/amd64") \
+    GLIBC_URL="https://repo.tlle.eu.org/alpine/v3.20/main/x86_64/glibc-2.36-r1.apk"; \
+    GLIBC_BIN_URL="https://repo.tlle.eu.org/alpine/v3.20/main/x86_64/glibc-bin-2.36-r1.apk"; \
+    ;; \
+    "linux/arm64") \
+    GLIBC_URL="https://repo.tlle.eu.org/alpine/v3.20/main/aarch64/glibc-2.35-r1.apk"; \
+    GLIBC_BIN_URL="https://repo.tlle.eu.org/alpine/v3.20/main/aarch64/glibc-bin-2.35-r1.apk"; \
+    ;; \
+    *) \
+    echo "不支持的平台: $TARGETPLATFORM" && exit 1; \
+    ;; \
+    esac && \
+    wget -q -O glibc.apk "$GLIBC_URL" && \
+    wget -q -O glibc-bin.apk "$GLIBC_BIN_URL" && \
+    apk add --no-cache --allow-untrusted --force-overwrite glibc.apk glibc-bin.apk && \
+    rm -f *.apk && \
+    chmod +x /root/snell/entrypoint.sh
     
-WORKDIR /root
-COPY ./config.conf /root/config.conf
-COPY ./snell-server /usr/bin/snell-server
+WORKDIR /root/snell
 
-RUN chmod +x /usr/bin/snell-server
+COPY entrypoint.sh /root/snell/
+
+ENTRYPOINT ["/sbin/tini", "--", "/root/snell/entrypoint.sh"]
     
 # ENTRYPOINT ["/root/snell.sh"]
