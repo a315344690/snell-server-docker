@@ -19,14 +19,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Get version from push tag
-        if: github.event_name == 'push'
+      - name: Get version
         run: |
-          echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
-      - name: Get version from workflow_dispatch
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "VERSION=${{ github.event.inputs.snell_server_version}}" >> $GITHUB_ENV
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
       - name: Set build date
         run: |
           echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
