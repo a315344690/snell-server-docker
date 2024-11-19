@@ -12,7 +12,7 @@ RUN apk add --no-cache wget unzip tini gcompat libstdc++ && \
     
 WORKDIR /root/snell
 
-RUN wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-aarch64.zip"
+RUN wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v4.1.1-linux-armv7l.zip"
 
 RUN if [ -f snell.zip ]; then unzip snell.zip && rm -f snell.zip; fi && \
     chmod +x snell-server
