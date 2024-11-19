@@ -26,6 +26,16 @@ RUN apk add --no-cache wget unzip tini gcompat libstdc++ && \
     
 WORKDIR /root/snell
 
+RUN case "${TARGETPLATFORM}" in \
+    "linux/amd64") wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v${SNELL_SERVER_VERSION}-linux-amd64.zip" ;; \
+    "linux/arm64") wget --no-check-certificate -O snell.zip "https://dl.nssurge.com/snell/snell-server-v${SNELL_SERVER_VERSION}-linux-aarch64.zip" ;; \
+    *) echo "unsupported platform: ${TARGETPLATFORM}"; exit 1 ;; \
+    esac
+
+RUN if [ -f snell.zip ]; then unzip snell.zip && rm -f snell.zip; fi && \
+    chmod +x snell-server && \
+    chmod +x entrypoint.sh
+
 COPY entrypoint.sh /root/snell/
 
 ENTRYPOINT ["/sbin/tini", "--", "/root/snell/entrypoint.sh"]
