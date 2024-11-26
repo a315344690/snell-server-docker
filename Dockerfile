@@ -1,8 +1,10 @@
 FROM ubuntu:24.04
 
 COPY entrypoint.sh /root/snell/
-RUN apt install wget unzip ca-certificates && \
-    chmod +x /root/snell/entrypoint.sh
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    wget \
+    unzip \
+    && chmod +x /root/snell/entrypoint.sh
     
 WORKDIR /root/snell
 
