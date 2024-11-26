@@ -48,7 +48,7 @@ jobs:
             ${{ env.IMAGE_REPOSITORY }}:${{ env.VERSION }}
             ${{ env.IMAGE_REPOSITORY }}:latest
           platforms: |
-            linux/arm64
+            linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
